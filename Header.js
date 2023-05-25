@@ -20,9 +20,10 @@ function Header() {
           </View>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-         
+          
         </View>
-       
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+          
         </View>
       </View>
     </GestureHandlerRootView>
