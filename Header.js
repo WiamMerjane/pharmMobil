@@ -20,22 +20,9 @@ function Header() {
           </View>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-          <TouchableOpacity>
-            <Text>Accueil</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>A propos</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Contacts</Text>
-          </TouchableOpacity>
+         
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-          <Icon name="search" size={20} color="black" />
-          <TextInput
-            style={{ marginLeft: 10, flex: 1, borderWidth: 1, borderColor: 'gray', borderRadius: 5, padding: 5 }}
-            placeholder="Rechercher"
-          />
+       
         </View>
       </View>
     </GestureHandlerRootView>
