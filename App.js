@@ -1,25 +1,22 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import Header from './Header';
-import Body from './Body';
 import Footer from './Footer';
+import Body from './Body';
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Header />
-        <Body />
-        
+      <Body />
       <Footer />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  scrollContent: {
     flexGrow: 1,
+    paddingBottom: 20,
   },
 });
