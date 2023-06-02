@@ -6,11 +6,14 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import markerIcon from './ma.png';
 import { Picker } from '@react-native-picker/picker';
 import 'react-native-gesture-handler';
+import Modal from 'react-native-modal';
+
 
 function MapTouchable(props) {
   const { children, onPress } = props;
@@ -32,6 +35,9 @@ function Body() {
   const [selectedGarde, setSelectedGarde] = useState(null);
   const [pharmacies, setPharmacies] = useState([]);
   const [pharmacyLocations, setPharmacyLocations] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedPharmacy, setSelectedPharmacy] = useState(null);
+
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -118,10 +124,15 @@ function Body() {
           );
         }
       } catch (error) {
-        console.error(error.message);
+        console.error(error.message); 
       }
     }
   };
+  const handleViewDetails = (pharmacy) => {
+  setSelectedPharmacy(pharmacy);
+  setIsModalVisible(true);
+  };
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -222,31 +233,52 @@ function Body() {
           </View>
         </MapTouchable>
         <View style={styles.pharmacyContainer}>
-          <View style={styles.tableHeader}>
-            <Text style={[styles.tableHeaderText, styles.columnHeader]}>
-              Pharmacy Name
+      <View style={styles.tableHeader}>
+        <Text style={[styles.tableHeaderText, styles.columnHeader]}>
+          Pharmacy Name
+        </Text>
+        <Text style={[styles.tableHeaderText, styles.columnHeader]}>Address</Text>
+        <Text style={[styles.tableHeaderText, styles.columnHeader]}></Text>
+      </View>
+      <ScrollView style={styles.tableBody}>
+        {pharmacies.map((pharmacy, index) => (
+          <View
+            key={index}
+            style={[
+              styles.tableRow,
+              index % 2 === 0 ? styles.tableRowEven : styles.tableRowOdd,
+            ]}
+          >
+            <Text style={[styles.tableRowText, styles.columnData]}>
+              {pharmacy.name}
             </Text>
-            <Text style={[styles.tableHeaderText, styles.columnHeader]}>Address</Text>
+            <Text style={[styles.tableRowText, styles.columnData]}>
+              {pharmacy.address}
+            </Text>
+            <Button
+              title="Voir détails"
+              onPress={() => handleViewDetails(pharmacy)}
+              color="#008000" // Vert
+            />
           </View>
-          <ScrollView style={styles.tableBody}>
-            {pharmacies.map((pharmacy, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.tableRow,
-                  index % 2 === 0 ? styles.tableRowEven : styles.tableRowOdd,
-                ]}
-              >
-                <Text style={[styles.tableRowText, styles.columnData]}>
-                  {pharmacy.name}
-                </Text>
-                <Text style={[styles.tableRowText, styles.columnData]}>
-                  {pharmacy.address}
-                </Text>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
+        ))}
+      </ScrollView>
+    </View>
+    <Modal
+  isVisible={isModalVisible}
+  onBackdropPress={() => setIsModalVisible(false)}
+>
+  <View style={styles.modalContent}>
+    <Text style={styles.modalTitle}>Informations</Text>
+    <Text>Nom : {selectedPharmacy?.name}</Text>
+    <Text>Adresse : {selectedPharmacy?.address}</Text>
+    
+    <Image source={require('./pharmacy.jpeg')} style={styles.image} />
+    
+  </View>
+</Modal>
+
+
       </View>
     </ScrollView>
   );
@@ -316,6 +348,24 @@ const styles = StyleSheet.create({
   },
   columnData: {
     flex: 1,
+  }, 
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+  },
+  image: {
+    width: 370,
+    height: 300,
+    marginBottom: 10,
+    alignSelf: 'center',
+  },
+  modalTitle: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+    color: 'green'
   },
 });
 
